@@ -1,0 +1,14 @@
+default: &default
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch('PGUSERNAME', 'postgres') %>
+  password: <%= ENV.fetch('PGPASSWORD', 'password') %>
+
+development:
+  <<: *default
+  database: minerva_development
+
+test:
+  <<: *default
+  database: minerva_test
+
