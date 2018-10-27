@@ -6,9 +6,13 @@ default: &default
 
 development:
   <<: *default
-  database: minerva_development
+  database: minerva_demo_development
 
 test:
   <<: *default
-  database: minerva_test
+  database: minerva_demo_test
+
+production:
+  <<: *default
+  database: minerva_demo_development
 

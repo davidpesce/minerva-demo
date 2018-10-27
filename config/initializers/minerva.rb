@@ -26,12 +26,11 @@ Minerva.configure do |config|
   # FieldTypes::CaseInsensitiveString.new('some_field', 'resources.some_field', :some_field, is_sortable: true)]
 
   config.extension_fields = []
+  config.search_by_taxonomy_aliases = true
 
-  # To extend resource model you need specify module, it will be added to resource model
-  # config.model_extensions = { resource: ResourceExtender }
-
-  # To extend resource serializer you need specify module, it will be added to resource serializer
-  # config.serializer_extensions = { resource_serializer: ResourceSerializerExtender }
-  config.model_extensions = { }
-  config.serializer_extensions = { }
+  config.admin_auth_proc = Proc.new do |controller|
+    controller.authenticate_or_request_with_http_basic('Minerva') do |username, password|
+      username == password && password == 'admin'
+    end
+  end
 end
