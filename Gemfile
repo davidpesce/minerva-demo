@@ -13,6 +13,8 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
+gem 'gollum', git: 'https://github.com/gollum/gollum', branch: '5.x'
+
 gem 'minerva', git: 'https://github.com/openedinc/minerva'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
