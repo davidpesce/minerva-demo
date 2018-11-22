@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/openedinc/minerva
-  revision: 88aa2f95b0ebd095f7b01deba2667d658abb3b23
+  revision: 72f85d9f2584d8e122b7bfd114beefa3e2047e50
   specs:
     minerva (0.1.0)
       active_model_serializers
