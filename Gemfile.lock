@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/gollum/gollum
-  revision: eade94dcfd9f58bad34d6d2c88ea95c7dd956574
+  revision: bde72cb52e5418d6293b1b58ca3a32ccf93acedd
   branch: 5.x
   specs:
     gollum (5.0.1b)
@@ -356,7 +356,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stringex (2.8.4)
+    stringex (2.8.5)
     swagger_ui_engine (1.1.2)
       rails (>= 4.2)
       sass-rails
@@ -400,4 +400,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.16.4
+   1.17.1
