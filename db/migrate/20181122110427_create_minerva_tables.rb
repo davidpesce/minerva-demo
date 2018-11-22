@@ -59,8 +59,11 @@ class CreateMinervaTables < MIGRATION_CLASS
 
     create_table 'resources', id: :serial, force: :cascade do |t|
       t.citext 'name', null: false
+      t.tsvector 'tsv_name'
       t.citext 'description'
+      t.tsvector 'tsv_description'
       t.string 'url', limit: 255
+      t.string 'cover', limit: 255
       t.jsonb 'lti_link', default: {}
       t.citext 'learning_resource_type'
       t.citext 'language', default: 'en'
@@ -78,20 +81,20 @@ class CreateMinervaTables < MIGRATION_CLASS
       t.citext 'accessibility_features', default: [], null: false, array: true
       t.citext 'accessibility_hazards', default: [], null: false, array: true
       t.citext 'access_mode', default: [], null: false, array: true
-      t.datetime 'publish_date'
+      t.date 'publish_date'
       t.integer 'direct_taxonomy_ids', default: [], null: false, array: true
       t.integer 'all_taxonomy_ids', default: [], null: false, array: true
       t.integer 'resource_stat_ids', default: [], null: false, array: true
       t.integer 'all_subject_ids', default: [], null: false, array: true
+      t.tsvector 'tsv_subjects'
       t.jsonb 'efficacy'
       t.integer 'avg_efficacy', default: 0
       t.integer 'min_age'
       t.integer 'max_age'
-      t.float 'rating'
+      t.integer 'rating'
       t.boolean 'embeddable', null: false, default: false
       t.string 'youtube_id'
       t.string 'thumbnail'
-      t.float 'relevance'
       t.tsvector 'tsv_text'
       t.datetime 'created_at', null: false
       t.datetime 'updated_at', null: false
@@ -179,12 +182,5 @@ class CreateMinervaTables < MIGRATION_CLASS
       t.index ['taxonomy_id'], name: 'index_taxonomy_mappings_taxonomy_id'
     end
 
-    create_trigger.on(:resources).after(:update).of(:name, :description, :all_subject_ids) do
-      "UPDATE resources SET tsv_text = to_tsvector('english'::regconfig, COALESCE(NEW.name, ''::character varying)::text) || to_tsvector('english'::regconfig, COALESCE(NEW.description, ''::text))  || to_tsvector('english'::regconfig, (SELECT COALESCE(string_agg(name, ' '), ''::text) from subjects where id = ANY(NEW.all_subject_ids))) WHERE id = NEW.id;"
-    end
-
-    create_trigger.on(:resources).after(:insert) do
-      "UPDATE resources SET tsv_text = to_tsvector('english'::regconfig, COALESCE(NEW.name, ''::character varying)::text) || to_tsvector('english'::regconfig, COALESCE(NEW.description, ''::text))  || to_tsvector('english'::regconfig, (SELECT COALESCE(string_agg(name, ' '), ''::text) from subjects where id = ANY(NEW.all_subject_ids))) WHERE id = NEW.id;"
-    end
   end
 end

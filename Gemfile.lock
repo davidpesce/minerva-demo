@@ -18,16 +18,19 @@ GIT
 
 GIT
   remote: https://github.com/openedinc/minerva
-  revision: 44275a0bd7875fc7dd988ae341148941bed63b5b
+  revision: dcfdde2e76cd525ee5ca0bfb5e9c4b69ab2b6bdd
   specs:
     minerva (0.1.0)
       active_model_serializers
       ancestry
+      carrierwave (~> 1.2.3)
+      carrierwave-aws
       chronic_duration
       faraday
       google-api-client (~> 0.24.3)
       hairtrigger
       kaminari
+      mini_magick
       parslet
       pg (~> 0.21)
       rails (~> 5.1.6)
@@ -61,7 +64,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_model_serializers (0.10.7)
+    active_model_serializers (0.10.8)
       actionpack (>= 4.1, < 6)
       activemodel (>= 4.1, < 6)
       case_transform (>= 0.2)
@@ -82,9 +85,24 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    ancestry (3.0.3)
+    ancestry (3.0.5)
       activerecord (>= 3.2.0)
     arel (8.0.0)
+    aws-eventstream (1.0.1)
+    aws-partitions (1.115.0)
+    aws-sdk-core (3.39.0)
+      aws-eventstream (~> 1.0)
+      aws-partitions (~> 1.0)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.12.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-s3 (1.25.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.0)
+    aws-sigv4 (1.0.3)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -92,6 +110,13 @@ GEM
     backports (3.11.4)
     builder (3.2.3)
     byebug (10.0.2)
+    carrierwave (1.2.3)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    carrierwave-aws (1.3.0)
+      aws-sdk-s3 (~> 1.0)
+      carrierwave (>= 0.7, < 2.0)
     case_transform (0.2)
       activesupport
     charlock_holmes (0.7.6)
@@ -106,7 +131,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.3)
     crass (1.0.4)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -168,6 +193,7 @@ GEM
     i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
+    jmespath (1.4.0)
     jquery-rails (4.3.3)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -200,10 +226,11 @@ GEM
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     memoist (0.16.0)
-    method_source (0.9.0)
+    method_source (0.9.2)
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2018.0812)
+    mini_magick (4.9.2)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -222,7 +249,7 @@ GEM
     posix-spawn (0.3.13)
     public_suffix (3.0.3)
     puma (3.12.0)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
@@ -285,7 +312,7 @@ GEM
       sexp_processor (~> 4.9)
     sanitize (2.1.1)
       nokogiri (>= 1.4.4)
-    sass (3.6.0)
+    sass (3.7.2)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -334,7 +361,7 @@ GEM
       rails (>= 4.2)
       sass-rails
     temple (0.8.0)
-    thor (0.20.0)
+    thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.8)
     twitter-text (1.14.7)

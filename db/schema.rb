@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181027072924) do
+ActiveRecord::Schema.define(version: 20181122110427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,11 @@ ActiveRecord::Schema.define(version: 20181027072924) do
 
   create_table "resources", id: :serial, force: :cascade do |t|
     t.citext "name", null: false
+    t.tsvector "tsv_name"
     t.citext "description"
+    t.tsvector "tsv_description"
     t.string "url", limit: 255
+    t.string "cover", limit: 255
     t.jsonb "lti_link", default: {}
     t.citext "learning_resource_type"
     t.citext "language", default: "en"
@@ -68,20 +71,20 @@ ActiveRecord::Schema.define(version: 20181027072924) do
     t.citext "accessibility_features", default: [], null: false, array: true
     t.citext "accessibility_hazards", default: [], null: false, array: true
     t.citext "access_mode", default: [], null: false, array: true
-    t.datetime "publish_date"
+    t.date "publish_date"
     t.integer "direct_taxonomy_ids", default: [], null: false, array: true
     t.integer "all_taxonomy_ids", default: [], null: false, array: true
     t.integer "resource_stat_ids", default: [], null: false, array: true
     t.integer "all_subject_ids", default: [], null: false, array: true
+    t.tsvector "tsv_subjects"
     t.jsonb "efficacy"
     t.integer "avg_efficacy", default: 0
     t.integer "min_age"
     t.integer "max_age"
-    t.float "rating"
+    t.integer "rating"
     t.boolean "embeddable", default: false, null: false
     t.string "youtube_id"
     t.string "thumbnail"
-    t.float "relevance"
     t.tsvector "tsv_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -168,37 +171,5 @@ ActiveRecord::Schema.define(version: 20181027072924) do
     t.index ["target_id"], name: "index_taxonomy_mappings_target_id"
     t.index ["taxonomy_id"], name: "index_taxonomy_mappings_taxonomy_id"
   end
-
-  # no candidate create_trigger statement could be found, creating an adapter-specific one
-  execute(<<-TRIGGERSQL)
-CREATE OR REPLACE FUNCTION public.resources_after_insert_row_tr()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    UPDATE resources SET tsv_text = to_tsvector('english'::regconfig, COALESCE(NEW.name, ''::character varying)::text) || to_tsvector('english'::regconfig, COALESCE(NEW.description, ''::text))  || to_tsvector('english'::regconfig, (SELECT COALESCE(string_agg(name, ' '), ''::text) from subjects where id = ANY(NEW.all_subject_ids))) WHERE id = NEW.id;
-    RETURN NULL;
-END;
-$function$
-  TRIGGERSQL
-
-  # no candidate create_trigger statement could be found, creating an adapter-specific one
-  execute("CREATE TRIGGER resources_after_insert_row_tr AFTER INSERT ON \"resources\" FOR EACH ROW EXECUTE PROCEDURE resources_after_insert_row_tr()")
-
-  # no candidate create_trigger statement could be found, creating an adapter-specific one
-  execute(<<-TRIGGERSQL)
-CREATE OR REPLACE FUNCTION public.resources_after_update_of_name_description_all_subject_ids_r_tr()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    UPDATE resources SET tsv_text = to_tsvector('english'::regconfig, COALESCE(NEW.name, ''::character varying)::text) || to_tsvector('english'::regconfig, COALESCE(NEW.description, ''::text))  || to_tsvector('english'::regconfig, (SELECT COALESCE(string_agg(name, ' '), ''::text) from subjects where id = ANY(NEW.all_subject_ids))) WHERE id = NEW.id;
-    RETURN NULL;
-END;
-$function$
-  TRIGGERSQL
-
-  # no candidate create_trigger statement could be found, creating an adapter-specific one
-  execute("CREATE TRIGGER resources_after_update_of_name_description_all_subject_ids_r_tr AFTER UPDATE OF name, description, all_subject_ids ON resources FOR EACH ROW EXECUTE PROCEDURE resources_after_update_of_name_description_all_subject_ids_r_tr()")
 
 end
