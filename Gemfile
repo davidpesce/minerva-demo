@@ -15,6 +15,8 @@ gem 'puma', '~> 3.7'
 
 gem 'minerva', git: 'https://github.com/openedinc/minerva'
 
+gem 'rack-cors', require: 'rack/cors'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

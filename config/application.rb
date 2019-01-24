@@ -25,6 +25,14 @@ module MinervaDemo
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Session::CookieStore, {:key=>"_minerva_demo_session"}
 
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :options],
+                 expose: ['X-Total-Count']
+      end
+    end
+
     config.load_defaults 5.1
     config.api_only = true
   end
