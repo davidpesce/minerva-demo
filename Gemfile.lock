@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/openedinc/minerva
-  revision: 1971335da2afe8f4a842bc7d5ade762a31c08fe8
+  revision: 10f3f5130f5180a0a0804da70f2fd61d391f1ee6
   specs:
     minerva (0.1.0)
       active_model_serializers
@@ -75,7 +75,7 @@ GEM
       activerecord (>= 3.2.0)
     arel (9.0.0)
     aws-eventstream (1.0.1)
-    aws-partitions (1.142.0)
+    aws-partitions (1.143.0)
     aws-sdk-core (3.46.2)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
