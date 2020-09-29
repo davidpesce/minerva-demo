@@ -29,6 +29,7 @@ default: &default
   min_messages: log
   host: <%= ENV['DB_HOST'] || 'localhost' %>
   username: <%= ENV['PGUSERNAME'] || 'postgres' %>
+  password: <%= ENV['PGPASSWORD'] %>
 
 development:
   <<: *default
